@@ -1,4 +1,3 @@
-# Biblioteca
 from random import randint
 leitores = []
 livros = []
@@ -14,6 +13,8 @@ def main():
         cadastrarLivro()
     elif escolha == 3:
         buscarItem()
+    elif escolha == 4:
+        emprestarItem()
     else:
         print("\nDigite uma opção válida!")
         main()
@@ -40,7 +41,7 @@ def cadastrarLeitor():
         "matricula": matricula,
         "nome": nome,
         "cargo": cargo,
-        "status": "Ativo"
+        "status": "ativo"
     }
     
     leitores.append(leitor)
@@ -55,7 +56,7 @@ def cadastrarLivro():
     livro = {
         "titulo": titulo,
         "quantidade": quant,
-        "status": "Disponível",
+        "status": "disponivel",
         "id": id
     }
 
@@ -65,77 +66,71 @@ def cadastrarLivro():
     sair()
 
 def buscarItem():
-
     item = input("Digite o titulo ou o id do livro:")
-    for i in range(len(livros)):
-        if livros[i]["titulo"] == item:
-            print("Seu livro:")
-            print(livros[i])
-            sair()
-        else:
-            for j in range(len(livros)):
-                if livros[j]["id"] == int(item):
-                    print("Seu livro:")
-                    print(livros[j])
-                    sair()
-                else:
-                    print("Livro não encontrado, tente novamente")
-                    sair()
+    buscarLivro(item)
+    sair()
 
 def emprestarItem():
     
-    titulo = input("Digite o titulo do livro que deseja pegar emprestado:")
-    for i in range(len(livros)):
-        if livros[i]["titulo"] == titulo:
-            if livros[i]["status"] != "Disponível":
-                print("Este item esta indisponivel!")
-                sair()
+    item = input("Digite o titulo ou id do livro que deseja pegar emprestado:")
+    x = buscarLivro(item)
+    if livros[x]["status"] == "indisponivel":
+        print("Este item esta indisponivel!")
+        sair()
+    elif livros[x]["status"] == "disponivel":
+        matricula = int(input("Digite sua matricula:"))
+        y = buscarMatricula(matricula)
+        if leitores[y]["status"] == "suspenso":
+            print("Matricula temporariamente suspensa!")
+            sair()
+        elif leitores[y]["status"] == "ativo":
+            data = int(input("Em qual dia deseja pegar o livro? (apenas o dia)"))
+            escolha = input("Finalizar emprestimo do item: [S/N]").lower()
+            if escolha == "s":
+                emprestar(x, y, data)
             else:
-                print("Seu livro:")
-                print(livros[i])
-                print("\nContinuando...\n")
-    
-    matricula = int(input("Digite sua matricula:"))
-    for i in range(len(leitores)):
-        if leitores[i]["matricula"] == matricula:
-            if leitores[i]["status"] == "Ativo":
-                print("Matricula ativa para emprestimo de itens!")
-                print(leitores[i])
-                print("\nContinuando...\n")
-            else:
-                print("Matricula suspensa para emprestimos de itens!")
+                print("Emprestimo cancelado!")
                 sair()
 
-    data = int(input("Em qual dia deseja pegar o livro? (apenas o dia)"))
-    diaDevolucao = data + 14
+def buscarMatricula(x):
+    for i in range(len(leitores)):
+        if leitores[i]["matricula"] == x:
+            print(leitores[i])
+            return i
+
+def buscarLivro(x):
+    for i in range(len(livros)):
+        if livros[i]["titulo"] == x:
+            print("Seu livro:")
+            print(livros[i])
+            return i
+        elif livros[i]["id"] == int(x):
+            print("Seu livro:")
+            print(livros[i])
+            return i
+
+def emprestar(x, y, z):
+# x == posicao na lista de livros
+# y == posicao na lista de leitores
+# z == data de retirada
+    diaDevolucao = z + 14
     if diaDevolucao > 30:
         diaDevolucao - 30
 
-    confirmar = input("Deseja finalizar o emprestimo do item? [S/N]").lower
-    if confirmar == 'n':
-        print("Esprestimo cancelado!")
-        sair()
-    elif confirmar == 's':
+    livros[x]["quantidade"] -= 1
+    if livros[x]["quantidade"] < 1:
+        livros[x]["status"] = "indisponivel"
 
-        emprestimo = {
-            "matricula": matricula,
-            "titulo": titulo,
-            "dia da retirada": data,
-            "dia para devolucao": diaDevolucao 
-        }
-        emprestados.append(emprestimo)
-        for i in range(len(livros)):
-            if livros[i]["titulo"] == titulo:
-#diminuir a quantidade de livros aqui
-
-
-        print("Empréstimo comcluido com sucesso!")
-        sair()
-    else:
-        print("Opção inválida, emprestimo cancelado, tente novamente.")
-        sair()
-
-
+    emprestimo = {
+        "titulo": livros[x]["titulo"],
+        "id": livros[x]["id"],
+        "matricula": leitores[y]["matricula"],
+        "dataRetirada": z,
+        "dataDevolucao": diaDevolucao
+    }
+    emprestados.append(emprestimo)
+    print("Empréstimo comcluido com sucesso!")
+    sair()
     
 
 def sair():
@@ -145,5 +140,5 @@ def sair():
     else:
         main()
 
+
 main()
-    
