@@ -1,4 +1,3 @@
-# Biblioteca
 from random import randint
 leitores = []
 livros = []
