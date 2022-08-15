@@ -159,7 +159,6 @@ def devolverItem():
             escolha = input("Confirmar? [S/N]").lower()
             if escolha =="s":
                 emprestados.remove(emprestados[i])
-                print(emprestados)
                 for x in range(len(livros)):
                     if livros[x]["titulo"] == titulo:
                         livros[x]["quantidade"] += 1
