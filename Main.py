@@ -1,37 +1,8 @@
 # Biblioteca
 from random import randint
-leitores = [
-    {
-        "matricula": 123,
-        "nome": "Rodrigo",
-        "cargo": "aluno",
-        "status": "ativo"
-    }
-]
-livros = [
-    {
-        "titulo": "narnia",
-        "quantidade": 0,
-        "status": "indisponivel",
-        "id": 12431
-    },
-    {
-        "titulo": "sherlock",
-        "quantidade": 1,
-        "status": "disponivel",
-        "id": 12412
-    }
-]
-emprestados = [
-        {
-        "titulo": "narnia",
-        "id": 12431,
-        "matricula": 123,
-        "dataRetirada": 12,
-        "dataDevolucao": 26
-    }
-]
-
+leitores = []
+livros = []
+emprestados = []
 
 def main():
     print('O que você deseja?\n[ 1 ]Cadastrar leitores\n[ 2 ]Cadastrar itens\n[ 3 ]Buscar item\n[ 4 ]Realizar empréstimo de item\n[ 5 ]Devolver item\n[ 6 ]Listar itens disponíveis\n[ 7 ]Sair da biblioteca')
