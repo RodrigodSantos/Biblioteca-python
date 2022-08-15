@@ -1,8 +1,8 @@
-# Biblioteca
 from random import randint
 leitores = []
 livros = []
 emprestados = []
+
 
 def main():
     print('O que você deseja?\n[ 1 ]Cadastrar leitores\n[ 2 ]Cadastrar itens\n[ 3 ]Buscar item\n[ 4 ]Realizar empréstimo de item\n[ 5 ]Devolver item\n[ 6 ]Listar itens disponíveis\n[ 7 ]Sair da biblioteca')
@@ -17,6 +17,10 @@ def main():
         emprestarItem()
     elif escolha == 5:
         devolverItem()
+    elif escolha == 6:
+        listarItensDisponiveis()
+    elif escolha == 7:
+        return print('------------\nVolte sempre\n------------')
     else:
         print("\nDigite uma opção válida!")
         main()
@@ -166,6 +170,16 @@ def devolverItem():
                             livros[x]["status"] = "disponivel"
                         print("Devolução concluida com sucesso!")
                         sair()
+
+def listarItensDisponiveis():
+    if livros == []:
+        print("Sem livros disponiveis!")
+        sair()
+    else:
+        for i in range(len(livros)):
+            if livros[i]["status"] == "disponivel":
+                print(livros[i])   
+        sair()                   
 
 def sair():
     escolha = str(input("Deseja sair da biblioteca: [S/N]")).lower()
