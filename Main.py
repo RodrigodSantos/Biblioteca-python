@@ -1,3 +1,4 @@
+# Biblioteca
 from random import randint
 leitores = []
 livros = []
@@ -28,7 +29,7 @@ def main():
 def cadastrarLeitor():
  
     matricula = int(input('Digite sua matrícula:'))
-    nome = str(input('Digite seu nome:'))
+    nome = input('Digite seu nome:').strip()
     cargo = int(input('Você é:\n1 - Aluno\n2 - Professor\n3 - Funcinário\n'))
 
     if cargo == 1:
@@ -54,7 +55,7 @@ def cadastrarLeitor():
 
 def cadastrarLivro():
 
-    titulo = str(input("Digite o titúlo do livro:"))
+    titulo = input("Digite o titúlo do livro:").strip()
     quant = int(input("Digite a quantidade de volumes que deseja cadastrar:"))
     id = randint(0, 99999)
 
@@ -71,7 +72,7 @@ def cadastrarLivro():
     sair()
 
 def buscarItem():
-    item = input("Digite o titulo ou o id do livro:")
+    item = input("Digite o titulo ou o id do livro:").strip()
     buscarLivro(item)
     sair()
 
@@ -160,7 +161,7 @@ def devolverItem():
     for i in range(len(emprestados)):
         if emprestados[i]["titulo"] == titulo:
             print("Item:{}" .format(emprestados[i]))
-            escolha = input("Confirmar? [S/N]").lower()
+            escolha = input("Confirmar? [S/N]").lower().strip()
             if escolha =="s":
                 emprestados.remove(emprestados[i])
                 for x in range(len(livros)):
@@ -182,7 +183,7 @@ def listarItensDisponiveis():
         sair()                   
 
 def sair():
-    escolha = str(input("Deseja sair da biblioteca: [S/N]")).lower()
+    escolha = str(input("Deseja sair da biblioteca: [S/N]")).lower().strip()
     if escolha == 's':
         print('------------\nVolte sempre\n------------')
     else:
