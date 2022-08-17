@@ -6,70 +6,79 @@ emprestados = []
 
 
 def main():
-    print('O que você deseja?\n[ 1 ]Cadastrar leitores\n[ 2 ]Cadastrar itens\n[ 3 ]Buscar item\n[ 4 ]Realizar empréstimo de item\n[ 5 ]Devolver item\n[ 6 ]Listar itens disponíveis\n[ 7 ]Sair da biblioteca')
-    escolha = int(input('\nQual a sua opção: '))
-    if escolha == 1:
-        cadastrarLeitor()
-    elif escolha == 2:
-        cadastrarLivro()
-    elif escolha == 3:
-        buscarItem()
-    elif escolha == 4:
-        emprestarItem()
-    elif escolha == 5:
-        devolverItem()
-    elif escolha == 6:
-        listarItensDisponiveis()
-    elif escolha == 7:
-        return print('------------\nVolte sempre\n------------')
-    else:
-        print("\nDigite uma opção válida!")
+    try:
+        print('O que você deseja?\n[ 1 ]Cadastrar leitores\n[ 2 ]Cadastrar itens\n[ 3 ]Buscar item\n[ 4 ]Realizar empréstimo de item\n[ 5 ]Devolver item\n[ 6 ]Listar itens disponíveis\n[ 7 ]Sair da biblioteca')
+        escolha = int(input('\nQual a sua opção: '))
+    except:
+        print("Digite um valor válido!")
         main()
+    else:
+        if escolha == 1:
+            cadastrarLeitor()
+        elif escolha == 2:
+            cadastrarLivro()
+        elif escolha == 3:
+            buscarItem()
+        elif escolha == 4:
+            emprestarItem()
+        elif escolha == 5:
+            devolverItem()
+        elif escolha == 6:
+            listarItensDisponiveis()
+        elif escolha == 7:
+            return print('------------\nVolte sempre\n------------')
+        else:
+            print("\nDigite uma opção válida!")
+            main()
 
 def cadastrarLeitor():
- 
-    matricula = int(input('Digite sua matrícula:'))
-    nome = input('Digite seu nome:').strip()
-    cargo = int(input('Você é:\n1 - Aluno\n2 - Professor\n3 - Funcinário\n'))
-
-    if cargo == 1:
-        cargo = "aluno"
-    elif cargo == 2:
-        cargo = "professor"
-    elif cargo == 3:
-        cargo = "funcionário"
+    try:
+        matricula = int(input('Digite sua matrícula:'))
+        nome = input('Digite seu nome:').strip()
+        cargo = int(input('Você é:\n1 - Aluno\n2 - Professor\n3 - Funcinário\n'))
+    except:
+        print("Caracter invalido!\nTente novamente:")
+        cadastrarLeitor()
     else:
-        print("Cargo inválido, preencha novamente os dados:")
-        return cadastrarLeitor()
-
-
+        if cargo == 1:
+            cargo = "aluno"
+        elif cargo == 2:
+            cargo = "professor"
+        elif cargo == 3:
+            cargo = "funcionário"
+        else:
+            print("Cargo inválido, preencha novamente os dados:")
+            return cadastrarLeitor()
     leitor = {
         "matricula": matricula,
         "nome": nome,
         "cargo": cargo,
         "status": "ativo"
     }
-    
     leitores.append(leitor)
     sair()
 
 def cadastrarLivro():
+    try:
+        titulo = input("Digite o titúlo do livro:").strip()
+        quant = int(input("Digite a quantidade de volumes que deseja cadastrar:"))
+    except:
+        print("Você digitou um valor invalido!\nTente novamente:")
+        cadastrarLivro()
+    else:
+        id = randint(0, 99999)
 
-    titulo = input("Digite o titúlo do livro:").strip()
-    quant = int(input("Digite a quantidade de volumes que deseja cadastrar:"))
-    id = randint(0, 99999)
+        livro = {
+            "titulo": titulo,
+            "quantidade": quant,
+            "status": "disponivel",
+            "id": id
+        }
 
-    livro = {
-        "titulo": titulo,
-        "quantidade": quant,
-        "status": "disponivel",
-        "id": id
-    }
-
-    livros.append(livro)
-    print("Seu livro foi cadastrado!")
-    print(livro)
-    sair()
+        livros.append(livro)
+        print("Seu livro foi cadastrado!")
+        print(livro)
+        sair()
 
 def buscarItem():
     item = input("Digite o titulo ou o id do livro:").strip()
@@ -77,26 +86,30 @@ def buscarItem():
     sair()
 
 def emprestarItem():
-    
     item = input("Digite o titulo ou id do livro que deseja pegar emprestado:")
     x = buscarLivro(item)
     if livros[x]["status"] == "indisponivel":
         print("Este item esta indisponivel!")
         sair()
     elif livros[x]["status"] == "disponivel":
-        matricula = int(input("Digite sua matricula:"))
-        y = buscarMatricula(matricula)
-        if leitores[y]["status"] == "suspenso":
-            print("Matricula temporariamente suspensa!")
-            sair()
-        elif leitores[y]["status"] == "ativo":
-            data = int(input("Em qual dia deseja pegar o livro? (apenas o dia)"))
-            escolha = input("Finalizar emprestimo do item: [S/N]").lower()
-            if escolha == "s":
-                emprestar(x, y, data)
-            else:
-                print("Emprestimo cancelado!")
+        try:
+            matricula = int(input("Digite sua matricula:"))
+        except:
+            print("Valor invalido!\nTente novamente:")
+            emprestarItem()
+        else:
+            y = buscarMatricula(matricula)
+            if leitores[y]["status"] == "suspenso":
+                print("Matricula temporariamente suspensa!")
                 sair()
+            elif leitores[y]["status"] == "ativo":
+                data = int(input("Em qual dia deseja pegar o livro? (apenas o dia)"))
+                escolha = input("Finalizar emprestimo do item: [S/N]").lower()
+                if escolha == "s":
+                    emprestar(x, y, data)
+                else:
+                    print("Emprestimo cancelado!")
+                    sair()
 
 def buscarMatricula(x):
     for i in range(len(leitores)):
@@ -144,19 +157,23 @@ def emprestar(x, y, z):
     sair()
     
 def devolverItem():
-    matricula = int(input("Digite sua matricula:"))
-    if emprestados == []:
-        print("Nenhum livro emprestado com essa matricula")
-        sair()
+    try:
+        matricula = int(input("Digite sua matricula:"))
+    except:
+        print("Digite um valor válido!\nTente novamente:")
+        devolverItem()
     else:
-        for i in range(len(emprestados)):
-            if emprestados[i]["matricula"] == matricula:
-                print("Matricula encontrada!")
-                print("Item:\n{}".format(emprestados[i]))
-            else:
-                print("Nenhum livro emprestado com essa matricula!")
-                sair()
-
+        if emprestados == []:
+            print("Nenhum livro emprestado com essa matricula")
+            sair()
+        else:
+            for i in range(len(emprestados)):
+                if emprestados[i]["matricula"] == matricula:
+                    print("Matricula encontrada!")
+                    print("Item:\n{}".format(emprestados[i]))
+                else:
+                    print("Nenhum livro emprestado com essa matricula!")
+                    sair()
     titulo = input("Digite o titulo que deseja devolver:")
     for i in range(len(emprestados)):
         if emprestados[i]["titulo"] == titulo:
@@ -183,11 +200,16 @@ def listarItensDisponiveis():
         sair()                   
 
 def sair():
-    escolha = str(input("Deseja sair da biblioteca: [S/N]")).lower().strip()
-    if escolha == 's':
-        print('------------\nVolte sempre\n------------')
-    else:
+    try:
+        escolha = str(input("Deseja sair da biblioteca: [S/N]")).lower().strip()
+    except:
+        print("Valor inválido!\nInício:")
         main()
+    else:
+        if escolha == 's':
+            print('------------\nVolte sempre\n------------')
+        else:
+            main()
 
 
 main()
