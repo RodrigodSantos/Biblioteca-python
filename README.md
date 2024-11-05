@@ -1,2 +1,2 @@
 # Biblioteca-python
-Projeto de uma biblioteca usando apenas python
+Projeto lógico de uma biblioteca usando apenas python
